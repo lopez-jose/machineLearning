@@ -80,4 +80,13 @@ print(data.head())
 
 
 data['Route'].str.split(' ')
+
+route_dict = {x: i for i, x in enumerate(data['Route'].unique())}
+
+
+def integer_encode_route_dict(x):
+    return route_dict[x]
+
+data['Route']=data['Route'].apply(integer_encode_route_dict)
+
 print(data.head())
