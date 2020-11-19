@@ -19,3 +19,18 @@ wget.download(url)
 import zipfile
 with zipfile.ZipFile('./Facebook_metrics.zip', 'r') as zip_ref:
     zip_ref.extractall('./')
+
+
+import pandas as pd
+import numpy as np
+
+np.random.seed(144)
+
+
+def shuffle_data(data):
+    np.random.shuffle(data)
+
+
+lr_dataframe = pd.read_csv('dataset_Facebook.csv')
+lr_dataframe.dropna(inplace=True)
+print(lr_dataframe.head(10))
