@@ -34,9 +34,25 @@ def shuffle_data(data):
     np.random.shuffle(data)
 
 
-columns_to_drop = ['Type', 'Lifetime Post Total Reach', 'Lifetime Post Total Impressions', 'Lifetime Engaged Users', 'Lifetime Post Consumers', 'Lifetime Post Consumptions',
-                   'Lifetime Post Impressions by people who have liked your page', 'Lifetime People who have liked your Page and engaged with your post', 'comment', 'like', 'share']
-
-lr_dataframe = pd.read_csv('dataset_Facebook.csv')
+lr_dataframe = pd.read_csv('dataset_Facebook.csv', sep=';')
 lr_dataframe.dropna(inplace=True)
+
+columns_to_drop = ['Type', 'Lifetime Post Total Reach', 'Lifetime Post Total Impressions',
+                   'Lifetime Engaged Users', 'Lifetime Post Consumers',
+                   'Lifetime Post Consumptions',
+                   'Lifetime Post Impressions by people who have liked your Page',
+                   'Lifetime Post reach by people who like your Page',
+                   'Lifetime People who have liked your Page and engaged with your post',
+                   'comment', 'like', 'share']
+
+lr_dataframe.drop(columns=columns_to_drop, inplace=True)
+
+
+def normalize_col(col):
+    return (col-col.min())/(col.max()-col.min())
+
+
+lr_dataframe = lr_dataframe.apply(normalize_col)
+
+
 print(lr_dataframe.head(10))
