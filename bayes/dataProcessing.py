@@ -12,6 +12,7 @@ import seaborn as sns # Used for plotting
 sns.countplot(data['Airline'])
 plt.yticks(rotation = 20)
 plt.xticks(rotation=90)
+
 plt.show()
 #Prints the first 5 values in the excel file
 print(data.head())
@@ -110,8 +111,10 @@ def normalize_plot(col):
     return(col-col.min())/(col.max()-col.min())
 data['Airline']=normalize_plot(data['Airline'])
 
+
+
 data['Airline'].plot.hist(bins=50,title='Airline Plot')
 
-#plt.show()
+plt.show()
 
 
