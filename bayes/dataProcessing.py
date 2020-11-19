@@ -89,4 +89,9 @@ def integer_encode_route_dict(x):
 
 data['Route']=data['Route'].apply(integer_encode_route_dict)
 
+
+#We then implement one hot encoding on the routes that are taken. 
+#data = pd.concat([data,pd.get_dummies(data['journey_month'],prefix = 'journey_month ')],axis = 1)
+data = pd.concat([data,pd.get_dummies(data['Route'],prefix='Route ')],axis=1)
+
 print(data.head())
