@@ -1,8 +1,18 @@
 import pandas as pd
 data = pd.read_excel('Data_Train.xlsx')  # Read in the data we downloaded
 data.dropna(inplace=True)
+import matplotlib.pyplot as plt
+import seaborn as sns # Used for plotting
+#import pandas as pd
 
+### YOUR CODE HERE ###
+#uncomment this after you use seaborn
 
+#sns.countplot(x="Airline", data = data)
+sns.countplot(data['Airline'])
+plt.yticks(rotation = 20)
+plt.xticks(rotation=90)
+plt.show()
 #Prints the first 5 values in the excel file
 print(data.head())
 
@@ -95,3 +105,13 @@ data['Route']=data['Route'].apply(integer_encode_route_dict)
 data = pd.concat([data,pd.get_dummies(data['Route'],prefix='Route ')],axis=1)
 
 print(data.head())
+
+def normalize_plot(col):
+    return(col-col.min())/(col.max()-col.min())
+data['Airline']=normalize_plot(data['Airline'])
+
+data['Airline'].plot.hist(bins=50,title='Airline Plot')
+
+#plt.show()
+
+
