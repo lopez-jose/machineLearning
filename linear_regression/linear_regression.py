@@ -96,11 +96,11 @@ of targets
 
 def separate_data(data):
     # here Y is the data from the beginning to -1 column from the end
-    Y = data[:, -1:]
-    X = bias_trick(data[:, :-1])
-    print(Y.shape)
-    print(X.shape)
-    return X, Y
+    y = data[:, -1:]
+    x = bias_trick(data[:, :-1])
+    print(y.shape)
+    print(x.shape)
+    return x, y
 
     '''
     Takes raw data in and splits the data into
@@ -111,11 +111,34 @@ def separate_data(data):
 
 
 def train_test_split(data, train_size=.80):
-    X, Y = separate_data(data)
-    per = int(train_size*X.shape[0])
-    X_train = X[:per]
-    X_test = X[per:]
-    Y_train = Y[:per]
-    Y_test = Y[per:]
+    x, y = separate_data(data)
+    per = int(train_size*x.shape[0])
+    x_train = x[:per]
+    x_test = x[per:]
+    y_train = y[:per]
+    y_test = y[per:]
 
-    return X_train, Y_train, X_test, Y_test
+    return x_train, y_train, x_test, y_test
+
+
+train_test_split(lr_data)
+
+
+# Now we begin to train and test the model.
+
+'''
+Takes the target values and predicted values and calculates the squared
+error between them
+'''
+
+
+def mse(y_pred, y_true):
+    n = len(y_pred)
+    return 0.5(1/n)*np.sum((y_pred-y_true)**2)
+
+
+def mse_derivative(x, y, theta):
+    n = len(x)
+    x_trans = X.T  # this makes the transpose of X
+    y_hat = np.dot(X, theta)
+    return(1/n)*np.dot(x_trans)
