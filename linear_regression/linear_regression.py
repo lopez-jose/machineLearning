@@ -139,6 +139,44 @@ def mse(y_pred, y_true):
 
 def mse_derivative(x, y, theta):
     n = len(x)
-    x_trans = X.T  # this makes the transpose of X
-    y_hat = np.dot(X, theta)
+    x_trans = x.T  # this makes the transpose of X
+    y_hat = np.dot(x, theta)
     return(1/n)*np.dot(x_trans)
+
+
+'''
+Gradient descent step.
+
+Take x,y, theta and alpha
+and returns an updated theta vector.
+'''
+
+
+def gradient_descent_step(x, y, theta, alpha):
+    new_mse = mse_derivative(x, y, theta)
+    theta = theta-alpha(new_mse)
+    return theta
+
+
+def linear_regression(data, num_epochs=30000, alpha=0.00005):
+    x_train, y_train, x_test, y_test = train_test_split(data)
+
+    train_errors = []
+    test_errors = []
+
+    # Defining theta
+
+    theta = np.zeros((x_train.shape[1], 1))
+
+    for i in range(num_epochs):
+        train_error = mse(np.dot(x_train, theta), y_train)
+
+        # adds current error to train_errors
+        train_errors.append(train_error)
+
+        test_error = mse(np.dot(x_test, theta), y_test)
+        test_errors.append(test_error)
+
+        # Run gradient descent on the training set
+        theta = gradient_descent_step(x_train, y_train, theta, alpha)
+    return theta, train_errors, test_errors
