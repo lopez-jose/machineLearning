@@ -35,7 +35,11 @@ def shuffle_data(data):
 
 
 lr_dataframe = pd.read_csv('dataset_Facebook.csv', sep=';')
+print(lr_dataframe.head(10))
+
+
 lr_dataframe.dropna(inplace=True)
+
 
 columns_to_drop = ['Type', 'Lifetime Post Total Reach', 'Lifetime Post Total Impressions',
                    'Lifetime Engaged Users', 'Lifetime Post Consumers',
@@ -54,5 +58,64 @@ def normalize_col(col):
 
 lr_dataframe = lr_dataframe.apply(normalize_col)
 
+# Get Entries as a numpy array
+
+lr_data = lr_dataframe.values[:, :]
+
+shuffle_data(lr_data)
+
 
 print(lr_dataframe.head(10))
+
+
+'''
+Combines one column of all ones and the matrix X to account for the bias term
+(setting x_0 = 1) - [Hint: you may want to use np.hstack()]
+Takes input matrix X
+Returns the augmented input
+'''
+
+'''
+hello
+'''
+# Adds a column of 1 to dataset for the bias term
+
+
+def bias_trick(X):
+    bias = np.ones((len(X), 1))
+    X = np.hstack((bias, X))
+    return X
+
+
+'''
+Separates feature vectors and targets
+Takes raw data and returns X as the matrix of feature vector and Y as the Vector
+of targets
+'''
+
+
+def separate_data(data):
+    # here Y is the data from the beginning to -1 column from the end
+    Y = data[:, -1:]
+    X = bias_trick(data[:, :-1])
+    print(Y.shape)
+    print(X.shape)
+    return X, Y
+
+    '''
+    Takes raw data in and splits the data into
+    X_train, y_train, X_test, y_test
+
+    Returns X_train,y_train,X_test,y_test
+    '''
+
+
+def train_test_split(data, train_size=.80):
+    X, Y = separate_data(data)
+    per = int(train_size*X.shape[0])
+    X_train = X[:per]
+    X_test = X[per:]
+    Y_train = Y[:per]
+    Y_test = Y[per:]
+
+    return X_train, Y_train, X_test, Y_test
