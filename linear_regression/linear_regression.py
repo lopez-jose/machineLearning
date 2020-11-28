@@ -11,6 +11,7 @@
 
 # wget http://archive.ics.uci.edu/ml/machine-learning-databases/00368/Facebook_metrics.zip -O ./Facebook_metrics.zip
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import zipfile
@@ -134,14 +135,14 @@ error between them
 
 def mse(y_pred, y_true):
     n = len(y_pred)
-    return 0.5(1/n)*np.sum((y_pred-y_true)**2)
+    return 0.5*(1/n)*np.sum((y_pred-y_true)**2)
 
 
 def mse_derivative(x, y, theta):
     n = len(x)
     x_trans = x.T  # this makes the transpose of X
     y_hat = np.dot(x, theta)
-    return(1/n)*np.dot(x_trans)
+    return(1/n)*np.dot(x_trans, (y_hat-y))
 
 
 '''
@@ -154,7 +155,7 @@ and returns an updated theta vector.
 
 def gradient_descent_step(x, y, theta, alpha):
     new_mse = mse_derivative(x, y, theta)
-    theta = theta-alpha(new_mse)
+    theta = theta-alpha*(new_mse)
     return theta
 
 
@@ -180,3 +181,12 @@ def linear_regression(data, num_epochs=30000, alpha=0.00005):
         # Run gradient descent on the training set
         theta = gradient_descent_step(x_train, y_train, theta, alpha)
     return theta, train_errors, test_errors
+
+
+# plot the training and test errors
+
+
+theta, train_errors, test_errors = linear_regression(lr_data)
+plt.plot(train_errors, label="Training error")
+plt.plot(test_errors, label="Test Error")
+plt.legend()
