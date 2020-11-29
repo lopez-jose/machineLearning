@@ -33,3 +33,16 @@ poly_data = np.hstack((x.reshape(-1, 1), y.reshape(-1, 1)))
 np.random.shuffle(poly_data)
 x = poly_data[:, 0]
 y = poly_data[:, 1]
+
+
+def compute_line_from_regr(X_data, y_data, regr):
+    l_bound = np.min(X_data)
+    r_bound = np.max(X_data)
+    return [l_bound, r_bound], [l_bound*regr.coef_+regr.intercept_, r_bound*regr.coef_+regr.intercept_]
+
+
+reg = LinearRegression().fit(x.reshape(-1, 1), y)
+plt.scatter(x, y, s=10)
+line_x, line_y = compute_line_from_regr(x.reshape(-1, 1), y, reg)
+plt.plot(line_x, line_y, color='r')
+plt.show()
