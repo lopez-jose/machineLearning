@@ -1,5 +1,8 @@
+from sklearn.linear_model import LinearRegression
 import numpy as np
 import matplotlib.pyplot as plt
+
+# Normalizes the data
 
 
 def normalize_data(data):
@@ -23,3 +26,9 @@ y = normalize_data(y)
 
 plt.scatter(x, y, s=10)
 plt.show()
+
+
+poly_data = np.hstack((x.reshape(-1, 1), y.reshape(-1, 1)))
+np.random.shuffle(poly_data)
+x = poly_data[:, 0]
+y = poly_data[:, 1]
