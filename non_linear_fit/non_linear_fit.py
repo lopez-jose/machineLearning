@@ -46,3 +46,131 @@ plt.scatter(x, y, s=10)
 line_x, line_y = compute_line_from_regr(x.reshape(-1, 1), y, reg)
 plt.plot(line_x, line_y, color='r')
 plt.show()
+
+
+# this linear regression line shows that it does not fit the data set
+
+'''
+Takes raw data in and splits the data into
+x_train, y_train, x_test, y_test, x_val,y_val
+Returns x_train, y_train, x_test,y_test,x_val,y_val
+'''
+
+# adds a column of 1 to windows
+
+
+def bias_trick(X):
+    bias = np.ones((len(X), 1))
+    X = np.hstack((bias, X))
+    return X
+
+
+def separate_data(data):
+    y = data[:, -1:]
+    x = bias_trick[data[:, :-1]]
+
+    return x, y
+
+
+def train_test_validation_split(data, test_size=.20, validation_size=0.20):
+    x, y = separate_data(data)
+    split = int(test_size*x.shape[0])
+    x_test = x[:split]
+    x_val = x[split:(split*2)]
+    x_train = x[(split*2):]
+
+    y_test = y[:split]
+    y_val = y[split:(split*2)]
+    y_train = x[(split*2):]
+
+    print(x_test.shape)
+    print(x_val.shape)
+    print(x_train.shape)
+
+    return x_train, y_train, y_test, x_val, y_val
+
+
+'''
+Adds columnts to data up to the specified degree. 
+
+EX: if Degree = 3, (x) -> (x,x^2,x^3)
+'''
+
+
+def add_polycols(x, degree):
+    x_col = x[:, -1]
+
+    for i in range(2, degree+1):
+        x = np.hstack((x, (x_col**i).reshape(-1, 1)))
+
+
+'''
+Takes the target values and predicted values and calculates
+the absolute error between them
+'''
+
+
+def mse(y_pred, y_true):
+    n = len(y_pred)
+    return 0.5*(1/n)*np.sum((y_pred-y_true)**2)
+
+
+'''
+Implementation of the derivative of MSE. 
+Returns a vector of the derivations of loss
+with respect to each of the dimensions
+'''
+
+
+def mse_derivative(x, y, theta):
+    n = len(x)
+    x_trans = x.T
+    y_hat = np.dot(x, theta)
+    return (1/n)*np.dot(x_trans, (y_hat-y))
+
+
+'''
+Computs L@ norm from theta scaled by lambda
+Returns a scaler L2 norm. 
+'''
+
+
+def l2norm(theta, lamb):
+    return lamb*np.sum(theta*2)
+
+
+'''
+Computes derivative of L2 Norm scaled by lambda
+Returns a vector of derivative of L2 norms. 
+'''
+
+
+def l2norm_derivative(theta, lamb):
+    return 2*lamb*theta
+
+
+'''
+Computes total cost (cost function + regularization term)
+'''
+
+
+def compute_cost(x, y, theta, lamb):
+    y_hat = np.dot(x, theta)
+    return mse(y_hat, y)+l2norm(theta, lamb)
+
+
+'''
+Gradient descent step. 
+Taxes x, y, theta vector and alpha. 
+Returns an updated theta vector
+'''
+
+
+def gradient_descent_step(x, y, theta, alpha, lamb):
+    new_mse = mse_derivative(x, y, theta)
+    theta = theta - alpha*(new_mse)
+    theta + l2norm_derivative(theta, lamb)
+    return theta
+
+
+def polynomial_regression
