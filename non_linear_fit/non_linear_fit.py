@@ -217,9 +217,9 @@ def polynomial_regression(data, degree, num_epochs=100000, alpha=1e-4, lamb=0):
 
 
 # degree d
-polynomial_order = 4
+polynomial_order = 3
 
-regularization_param = 5
+regularization_param = 0.1
 
 theta, train_errors, val_errors = polynomial_regression(
     poly_data, polynomial_order, lamb=regularization_param, num_epochs=100000, alpha=1e-4)
