@@ -60,15 +60,15 @@ Returns x_train, y_train, x_test,y_test,x_val,y_val
 # adds a column of 1 to windows
 
 
-def bias_trick(X):
-    bias = np.ones((len(X), 1))
-    X = np.hstack((bias, X))
-    return X
+def bias_trick(x):
+    bias = np.ones((len(x), 1))
+    x = np.hstack((bias, x))
+    return x
 
 
 def separate_data(data):
     y = data[:, -1:]
-    x = bias_trick[data[:, :-1]]
+    x = bias_trick(data[:, :-1])
 
     return x, y
 
@@ -88,7 +88,7 @@ def train_test_validation_split(data, test_size=.20, validation_size=0.20):
     print(x_val.shape)
     print(x_train.shape)
 
-    return x_train, y_train, y_test, x_val, y_val
+    return x_train, y_train, x_test, y_test, x_val, y_val
 
 
 '''
