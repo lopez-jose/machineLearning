@@ -82,7 +82,7 @@ def train_test_validation_split(data, test_size=.20, validation_size=0.20):
 
     y_test = y[:split]
     y_val = y[split:(split*2)]
-    y_train = x[(split*2):]
+    y_train = y[(split*2):]
 
     print(x_test.shape)
     print(x_val.shape)
@@ -92,7 +92,7 @@ def train_test_validation_split(data, test_size=.20, validation_size=0.20):
 
 
 '''
-Adds columnts to data up to the specified degree. 
+Adds columns to data up to the specified degree. 
 
 EX: if Degree = 3, (x) -> (x,x^2,x^3)
 '''
@@ -103,6 +103,7 @@ def add_polycols(x, degree):
 
     for i in range(2, degree+1):
         x = np.hstack((x, (x_col**i).reshape(-1, 1)))
+    return x
 
 
 '''
@@ -137,7 +138,7 @@ Returns a scaler L2 norm.
 
 
 def l2norm(theta, lamb):
-    return lamb*np.sum(theta*2)
+    return lamb*np.sum(theta**2)
 
 
 '''
@@ -187,7 +188,7 @@ def polynomial_regression(data, degree, num_epochs=100000, alpha=1e-4, lamb=0):
     x_test = add_polycols(x_test, degree)
 
     # define theta
-    theta = np.zeroes((x_train.shape[1], 1))
+    theta = np.zeros((x_train.shape[1], 1))
 
     # Carry out the training loop
 
@@ -216,18 +217,18 @@ def polynomial_regression(data, degree, num_epochs=100000, alpha=1e-4, lamb=0):
 
 
 # degree d
-polynomial_order = 3
+polynomial_order = 4
 
-regularization_param = 1
+regularization_param = 5
 
 theta, train_errors, val_errors = polynomial_regression(
     poly_data, polynomial_order, lamb=regularization_param, num_epochs=100000, alpha=1e-4)
 
 
-def plot_results(theta, x, y):
-    y_hat = sum([t*x**i for i, t in enumerate(theta)])
-    plt.scatter(x, y_hat, s=10, color='r')
-    plt.scatter(x, y, s=10)
+def plot_results(theta, X, Y):
+    y_hat = sum([t*X**i for i, t in enumerate(theta)])
+    plt.scatter(X, y_hat, s=10, color='r')
+    plt.scatter(X, Y, s=10)
     plt.show()
 
 
