@@ -1,3 +1,4 @@
+from numpy.core.defchararray import add
 from sklearn.linear_model import LinearRegression
 import numpy as np
 import matplotlib.pyplot as plt
@@ -173,4 +174,61 @@ def gradient_descent_step(x, y, theta, alpha, lamb):
     return theta
 
 
-def polynomial_regression
+def polynomial_regression(data, degree, num_epochs=100000, alpha=1e-4, lamb=0):
+    x_train, y_train, x_test, y_test, x_val, y_val = train_test_validation_split(
+        data)
+
+    train_errors = []
+    val_errors = []
+
+    # Add the appropriate amount of columns to each of the sets of data.
+    x_train = add_polycols(x_train, degree)
+    x_val = add_polycols(x_val, degree)
+    x_test = add_polycols(x_test, degree)
+
+    # define theta
+    theta = np.zeroes((x_train.shape[1], 1))
+
+    # Carry out the training loop
+
+    for i in range(num_epochs):
+        train_error = mse(np.dot(x_train, theta), y_train)
+        train_errors.append(train_error)
+
+        val_error = mse(np.dot(x_val, theta), y_val)
+
+        # appends val_error for current step
+        val_errors.append(val_error)
+
+        # perform gradient descent on the training set
+        # adjusts theta according to gradient_descent_step
+        theta = gradient_descent_step(x_train, y_train, theta, alpha, lamb)
+
+        if i % (num_epochs//10) == 0:
+            print(
+                f'({i} epochs)Training loss: {train_error},Validation loss: {val_error}')
+        print(
+            f'{i} epochs) Final Training Loss" {train_error}, Final Validation Loss: {val_error}')
+
+        test_error = mse(np.dot(x_test, theta), y_test)
+        print(f'Final testing loss: {test_error}')
+        return theta, train_errors, val_errors
+
+
+# degree d
+polynomial_order = 3
+
+regularization_param = 1
+
+theta, train_errors, val_errors = polynomial_regression(
+    poly_data, polynomial_order, lamb=regularization_param, num_epochs=100000, alpha=1e-4)
+
+
+def plot_results(theta, x, y):
+    y_hat = sum([t*x**i for i, t in enumerate(theta)])
+    plt.scatter(x, y_hat, s=10, color='r')
+    plt.scatter(x, y, s=10)
+    plt.show()
+
+
+plot_results(theta, x, y)
